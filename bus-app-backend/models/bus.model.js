@@ -31,7 +31,22 @@ const BusSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  seats: [SeatSchema],
+  seats: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Seat",
+    },
+  ],
+  bookedSeats: {
+    type: Number,
+    default: 0,
+    validate: {
+      validator: function (v) {
+        return v <= this.maxSeats
+      },
+      message: "Booked seats cannot exceed max seats",
+    },
+  },
 })
 
 const BusModel = new mongoose.model("Bus", BusSchema)

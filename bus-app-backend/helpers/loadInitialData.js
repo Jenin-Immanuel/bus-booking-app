@@ -9,13 +9,12 @@ const loadInitialData = async () => {
   const maxSeats = 12
   let seats = []
   for (let i = 0; i < maxSeats; i++) {
-    const seat = new SeatModel({
+    const seat = await SeatModel.create({
       seatNo: i + 1,
-      isBooked: false,
       cost: 1000,
       isSleeper: false,
     })
-    seats.push(seat)
+    seats.push(seat._id)
   }
 
   const bus = new BusModel({

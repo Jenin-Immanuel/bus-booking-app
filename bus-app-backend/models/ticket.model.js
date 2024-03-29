@@ -18,10 +18,6 @@ const TicketSchema = new mongoose.Schema({
         ref: "Seat",
         required: true,
       },
-      name: {
-        type: String,
-        required: true,
-      },
     },
   ],
   totalCost: {
@@ -30,8 +26,8 @@ const TicketSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["booked", "cancelled"],
-    default: "booked",
+    enum: ["reserved", "booked", "cancelled"],
+    default: "reserved",
   },
   bookingDate: {
     type: Date,
@@ -39,6 +35,6 @@ const TicketSchema = new mongoose.Schema({
   },
 })
 
-const TicketModel = new mongoose.model("User", TicketSchema)
+const TicketModel = new mongoose.model("Ticket", TicketSchema)
 
-module.exports = TicketModel
+module.exports = { TicketModel }

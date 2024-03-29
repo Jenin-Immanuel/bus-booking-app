@@ -6,9 +6,25 @@ const SeatSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  isBooked: {
-    type: Boolean,
+  status: {
+    type: String,
+    enum: ["unreserved", "reserved", "paid"],
     required: true,
+    default: "unreserved",
+  },
+  pName: {
+    type: String,
+  },
+  pGender: {
+    type: String,
+    enum: ["M", "F", "O"],
+  },
+  pAge: {
+    type: Number,
+    validate: {
+      validator: (v) => v > 0,
+      message: "Age must be greater than 0",
+    },
   },
   cost: {
     type: Number,
@@ -17,6 +33,7 @@ const SeatSchema = new mongoose.Schema({
   isSleeper: {
     type: Boolean,
     required: true,
+    default: false,
   },
 })
 

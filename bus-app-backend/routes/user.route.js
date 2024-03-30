@@ -9,6 +9,7 @@ const {
   createUser,
   getUsers,
   login,
+  me,
 } = require("../controllers/user.controller")
 
 const router = express.Router()
@@ -24,5 +25,6 @@ router.route("/login").post(login)
 router.route("/hello").get(verifyToken, (req, res) => {
   res.json({ email: req.email })
 })
+router.route("/me").get(verifyToken, me)
 
 module.exports = router

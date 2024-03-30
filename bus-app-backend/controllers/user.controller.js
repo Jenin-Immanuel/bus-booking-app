@@ -57,9 +57,16 @@ const getUserByToken = async (req, res) => {
   return res.json(decoded)
 }
 
+const me = async (req, res) => {
+  const email = req.email
+  const user = await UserModel.findOne({ email })
+  return res.json({ email: user.email, name: user.name })
+}
+
 module.exports = {
   createUser,
   getUsers,
   getUserByToken,
   login,
+  me,
 }

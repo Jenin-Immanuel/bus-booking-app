@@ -3,7 +3,6 @@ import { useAuthStore } from "@/stores/authStore";
 
 // Constants
 import { API_URL } from "@/utils/constants";
-// const API_URL = "http://localhost:5555";
 
 // Hook Form
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,7 +23,6 @@ const loginSchema = z.object({
 
 export default function Login() {
   const login = useAuthStore((state) => state.login);
-  const isAuth = useAuthStore((state) => state.isAuth);
   const navigate = useNavigate();
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -45,19 +43,11 @@ export default function Login() {
 
     const data = await res.json();
     if (res.ok) {
-      const user = await fetch(API_URL + "/user/me", {
-        headers: {
-          authorization: `Bearer ${data.token}`,
-        },
-      });
-      const userData = await user.json();
-      console.log(userData);
-      console.log(data.token, userData.name, userData.email);
-      login(data.token, userData.name, userData.email);
-
-      //   const isAuth = useAuthStore((state) => state.isAuth);
+      login(data.name, data.email);
       navigate("/p/dashboard");
+      return;
     }
+    alert("Login Failed");
   }
 
   return (
@@ -66,7 +56,7 @@ export default function Login() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleLogin)}
-          className="space-y-8 w-1/3 flex flex-col gap-4 "
+          className="space-y-8 w-1/3 flex flex-col gap-4"
         >
           <FormField
             control={form.control}
@@ -100,7 +90,6 @@ export default function Login() {
           </div>
         </form>
       </Form>
-      <Button onClick={() => console.log(isAuth)}>Log</Button>
     </main>
   );
 }

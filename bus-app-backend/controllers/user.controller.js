@@ -48,7 +48,8 @@ async function login(req, res) {
     return res.status(401).json({ error: "Invalid user or password" })
   }
   const token = signJwt({ email: email })
-  return res.json({ token })
+  res.cookie("accessToken", token, { httpOnly: true, secure: true })
+  return res.json({ name: user.name, email: user.email })
 }
 
 const getUserByToken = async (req, res) => {

@@ -2,6 +2,7 @@ require("dotenv").config()
 
 const express = require("express")
 const cors = require("cors")
+const cookieParser = require("cookie-parser")
 
 // Utility functions
 const connectDB = require("./utils/connectDB")
@@ -21,6 +22,7 @@ const PORT = process.env.PORT || 8080
 app.use(cors({ origin: "*" }))
 app.use(express.json({ limit: "10mb" }))
 app.use(express.urlencoded({ extended: true, limit: "10mb" }))
+app.use(cookieParser())
 
 async function main() {
   connectDB()

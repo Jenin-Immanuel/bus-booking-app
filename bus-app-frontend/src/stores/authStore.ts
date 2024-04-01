@@ -39,12 +39,13 @@ export const useAuthStore = create<AuthStore>(
       email: data.email,
       login: (name: string, email: string) =>
         set({ isAuth: true, name, email }),
-      logout: () =>
+      logout: () => {
         set({
           isAuth: false,
           name: undefined,
           email: undefined,
-        }),
+        });
+      },
     }),
     {
       name: "auth-storage",

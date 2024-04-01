@@ -14,8 +14,13 @@ async function searchBusWithStartAndEnd(req, res) {
 
 async function searchBusWithStartEndAndTime(req, res) {
   const { start, end, startTime } = req.query
-  console.log(date)
-  const buses = await BusModel.find({ start, end, startTime: { $gte: date } })
+  const date = new Date(startTime)
+  console.log(date.toDateString())
+  const buses = await BusModel.find({
+    start,
+    end,
+    startTime: { $gte: date },
+  })
   return res.json(buses)
 }
 

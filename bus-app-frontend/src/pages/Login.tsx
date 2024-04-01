@@ -35,6 +35,7 @@ export default function Login() {
   async function handleLogin(values: z.infer<typeof loginSchema>) {
     const res = await fetch(API_URL + "/user/login", {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },

@@ -41,6 +41,7 @@ async function getUsers(req, res) {
 async function login(req, res) {
   const email = req.body.email
   const password = req.body.password
+  console.log(email, password)
   const user = await UserModel.findOne({ email: email })
   if (user === null) {
     return res.status(404).json({ error: "Invalid user or password" })
@@ -48,7 +49,12 @@ async function login(req, res) {
     return res.status(401).json({ error: "Invalid user or password" })
   }
   const token = signJwt({ email: email })
-  res.cookie("accessToken", token, { httpOnly: true, secure: true })
+  res.cookie("accessToken", token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    path: "/",
+  })
   return res.json({ name: user.name, email: user.email })
 }
 

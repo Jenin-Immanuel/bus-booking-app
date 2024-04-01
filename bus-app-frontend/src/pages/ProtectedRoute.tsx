@@ -7,13 +7,18 @@ import Dashboard from "./Dashboard";
 export default function ProtectedRoute() {
   const navigate = useNavigate();
   let isAuth = false;
+
   useEffect(() => {
-    // @ts-ignore
-    useAuthStore.persist.rehydrate();
-    isAuth = useAuthStore.getState().isAuth;
-    if (!isAuth) {
-      alert("Not logged in");
-      navigate("/login");
+    try {
+      // @ts-ignore
+      useAuthStore.persist.rehydrate();
+      isAuth = useAuthStore((state) => state.isAuth);
+      if (!isAuth) {
+        alert("Not logged in");
+        navigate("/login");
+      }
+    } catch (err) {
+      console.log(err);
     }
   }, []);
 

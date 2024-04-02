@@ -1,6 +1,7 @@
 const express = require("express")
 const { UserModel } = require("../models/user.model")
 const { signJwt } = require("../utils/jwt")
+const bcrypt = require("bcrypt")
 
 function checkIfUserExists(users, email) {
   let err
@@ -14,18 +15,24 @@ function checkIfUserExists(users, email) {
   return {}
 }
 
+async function hashPassword(password) {
+  const salt = await bcrypt.genSalt(10)
+  return await bcrypt.hash(password, salt)
+}
+
 async function createUser(req, res) {
   const users = await UserModel.find()
-  console.log(req.body)
 
   const err = checkIfUserExists(users, req.body.email)
   if (err.error) {
     return res.json(err)
   }
 
+  const hashedPassword = await hashPassword(req.body.password)
+
   const newUser = new UserModel({
     email: req.body.email,
-    password: req.body.password,
+    password: hashedPassword,
     name: req.body.name,
   })
 
@@ -41,13 +48,18 @@ async function getUsers(req, res) {
 async function login(req, res) {
   const email = req.body.email
   const password = req.body.password
-  console.log(email, password)
+
   const user = await UserModel.findOne({ email: email })
   if (user === null) {
     return res.status(404).json({ error: "Invalid user or password" })
-  } else if (user.password !== password) {
-    return res.status(401).json({ error: "Invalid user or password" })
   }
+
+  // Check Password
+  const validPassword = await bcrypt.compare(password, user.password)
+  if (!validPassword) {
+    return res.status(401).json({ error: "Invalid user or passwords" })
+  }
+
   const token = signJwt({ email: email })
   res.cookie("accessToken", token, {
     httpOnly: true,

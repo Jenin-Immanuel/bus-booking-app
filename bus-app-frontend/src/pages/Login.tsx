@@ -54,6 +54,7 @@ export default function Login() {
     toast({
       title: "Error",
       description: data.message,
+      variant: "destructive",
     });
   }
 

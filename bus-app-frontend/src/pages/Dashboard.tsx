@@ -14,6 +14,7 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import { useToast } from "@/components/ui/use-toast";
 
 import { useAuthStore } from "@/stores/authStore";
 import { useEffect, useState } from "react";
@@ -33,8 +34,13 @@ interface UserData {
 export default function Dashboard() {
   const logout = useAuthStore((state) => state.logout);
   const navigate = useNavigate();
+  const { toast } = useToast();
 
-  let [data, setData] = useState({ name: "", email: "" } as UserData);
+  const name = useAuthStore((state) => state.name);
+  const email = useAuthStore((state) => state.email);
+
+  let data = { name: name, email: email } as UserData;
+
   const [buses, setBuses] = useState<BusCardProps[]>([]);
 
   const searchSchema = z.object({
@@ -53,17 +59,7 @@ export default function Dashboard() {
   });
 
   useEffect(() => {
-    (async () => {
-      let res = await fetch(API_URL + "/user/me", {
-        credentials: "include",
-      });
-      const userData = await res.json();
-      setData(userData);
-      if (!res.ok) {
-        console.log("User not logged in");
-        return;
-      }
-    })();
+    console.log(data.name);
   }, []);
 
   async function handleLogout() {
@@ -76,13 +72,32 @@ export default function Dashboard() {
     const formattedDate = `${
       data.startTime.getMonth() + 1
     }-${data.startTime.getDate()}-${data.startTime.getFullYear()}`;
-    let url = new URL(API_URL + "/search/loc-time");
-    url.searchParams.set("start", data.from);
-    url.searchParams.set("end", data.to);
-    url.searchParams.set("startTime", formattedDate);
-    const res = await fetch(url.toString(), { credentials: "include" });
+    let url = new URL(API_URL + "/search");
+
+    // url.searchParams.set("start", data.from);
+    // url.searchParams.set("end", data.to);
+    // url.searchParams.set("startTime", formattedDate);
+    const res = await fetch(url.toString(), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        start: data.from,
+        end: data.to,
+        startTime: formattedDate,
+      }),
+      credentials: "include",
+    });
     const resultantData = await res.json();
-    setBuses(resultantData);
+
+    if (resultantData.status === "success" && resultantData.data.length > 0) {
+      setBuses(resultantData.data);
+    } else {
+      setBuses([]);
+      return toast({
+        title: "Bus Search",
+        description: "No buses found",
+      });
+    }
   }
 
   return (

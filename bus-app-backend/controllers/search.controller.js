@@ -1,21 +1,17 @@
 const { BusModel } = require("../models/bus.model")
 
-const BookingService = require("../services/booking.service")
-const bookingService = new BookingService(BusModel)
+const { SearchService } = require("../services/booking.service")
+const searchService = new SearchService(BusModel)
 
 async function searchBus(req, res) {
   const { start, end, startTime } = req.body
   let buses
   if (start && end && startTime) {
-    buses = await bookingService.getBusWithStartEndAndTime(
-      start,
-      end,
-      startTime
-    )
+    buses = await searchService.getBusWithStartEndAndTime(start, end, startTime)
   } else if (start && end) {
-    buses = await bookingService.getBusWithStartAndEnd(start, end)
+    buses = await searchService.getBusWithStartAndEnd(start, end)
   } else {
-    buses = await bookingService.getBusWithoutFilter()
+    buses = await searchService.getBusWithoutFilter()
   }
 
   return res.status(200).json({ status: "success", data: buses })

@@ -13,6 +13,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 
 import { useNavigate } from "react-router-dom";
 
@@ -24,6 +25,7 @@ const loginSchema = z.object({
 export default function Login() {
   const login = useAuthStore((state) => state.login);
   const navigate = useNavigate();
+  const { toast } = useToast();
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -43,12 +45,16 @@ export default function Login() {
     });
 
     const data = await res.json();
+
     if (res.ok) {
       login(data.name, data.email);
       navigate("/p/dashboard");
       return;
     }
-    alert("Login Failed");
+    toast({
+      title: "Error",
+      description: data.message,
+    });
   }
 
   return (

@@ -8,11 +8,11 @@ export default function ProtectedRoute() {
   const navigate = useNavigate();
   let isAuth = false;
 
+  isAuth = useAuthStore((state) => state.isAuth);
   useEffect(() => {
     try {
       // @ts-ignore
       useAuthStore.persist.rehydrate();
-      isAuth = useAuthStore((state) => state.isAuth);
       if (!isAuth) {
         alert("Not logged in");
         navigate("/login");
@@ -26,6 +26,10 @@ export default function ProtectedRoute() {
     {
       path: "/dashboard",
       element: <Dashboard />,
+    },
+    {
+      path: "/book",
+      element: <h1>Book</h1>,
     },
   ]);
 

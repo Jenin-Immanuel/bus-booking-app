@@ -22,12 +22,13 @@ let data: ResData = { name: undefined, email: undefined, isAuth: false };
 (async () => {
   const res = await fetch(API_URL + "/user/me", { credentials: "include" });
   const resData: any = await res.json();
-  if (resData.message === undefined) {
-    data.email = resData.email;
-    data.name = resData.name;
+
+  if (resData.status === "success") {
+    data.email = resData.data.email;
+    data.name = resData.data.name;
     data.isAuth = true;
   }
-  console.log("RR", resData);
+  // console.log("RR", resData);
 })();
 
 export const useAuthStore = create<AuthStore>(

@@ -9,7 +9,8 @@ const verifyToken = (req, res, next) => {
 
   jwt.verify(token, publicKey, (err, decoded) => {
     if (err) return res.status(401).json({ message: "Invalid token" })
-    req.email = decoded.email
+
+    req.userId = decoded.userId
     next()
   })
 }

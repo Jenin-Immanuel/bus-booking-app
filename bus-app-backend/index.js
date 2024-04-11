@@ -15,6 +15,9 @@ const userRouter = require("./routes/user.route")
 const searchRouter = require("./routes/search.route")
 const bookingRouter = require("./routes/booking.route")
 
+// Middlewares
+const errorHandler = require("./middlewares/errorHandler")
+
 const app = express()
 
 const PORT = process.env.PORT || 8080
@@ -27,6 +30,11 @@ app.use(cors({ origin: "http://localhost:5173", credentials: true }))
 async function main() {
   connectDB()
 
+  // app.use((err, req, res, next) => {
+  //   console.error(err.stack)
+  //   next(err)
+  // })
+
   // await loadInitialData()
   app.use("/user", userRouter)
   app.use("/search", searchRouter)
@@ -35,6 +43,7 @@ async function main() {
     res.send("Hello world")
   })
 
+  app.use(errorHandler)
   app.listen(PORT, () => {
     console.log(`Server connected at http://localhost:${PORT}/`)
   })

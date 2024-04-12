@@ -1,14 +1,18 @@
 import Seatchart from "@/components/ui/seatchart";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import SeatchartJS, { Options } from "seatchart";
-import { useToast } from "@/components/ui/use-toast";
+
+import axios from "axios";
 
 import "@/App.css";
 import "@/css/chart.min.css";
 
 const BookSeat = () => {
-  const { toast } = useToast();
+  const [busDetails, setBusDetails] = useState({} as any);
+
+  useEffect(() => {}, []);
+
   const rowCount = 7;
   const colCount = 3;
   const seatPrice = 1000;

@@ -25,6 +25,14 @@ class SearchService {
     })
     return buses
   }
+
+  async getBusById(id) {
+    const bus = await this.busModel.find({ _id: id })
+    if (!bus) {
+      throw new Error("Bus not found")
+    }
+    return bus
+  }
 }
 
 class BookingService {

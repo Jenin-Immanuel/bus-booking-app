@@ -1,3 +1,4 @@
+const checkParams = require("../helpers/checkParams")
 const { BusModel } = require("../models/bus.model")
 
 const { SearchService } = require("../services/booking.service")
@@ -17,6 +18,19 @@ async function searchBus(req, res) {
   return res.status(200).json({ status: "success", data: buses })
 }
 
+async function getBusById(req, res, next) {
+  const { id } = req.query
+  checkParams(id)
+  try {
+    const bus = await searchService.getBusById(id)
+    return res.status(200).json({ status: "success", data: bus })
+  } catch (err) {
+    err.message = "Bus not found"
+    next(err)
+  }
+}
+
 module.exports = {
   searchBus,
+  getBusById,
 }

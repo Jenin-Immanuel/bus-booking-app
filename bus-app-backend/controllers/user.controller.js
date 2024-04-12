@@ -45,6 +45,7 @@ const getUserByToken = async (req, res) => {
 
 const me = async (req, res) => {
   const user = await userService.me(req.userId)
+  console.log(user)
   return res
     .status(200)
     .json({ status: "success", data: { name: user.name, email: user.email } })

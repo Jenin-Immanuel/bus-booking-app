@@ -3,6 +3,7 @@ import { useRoutes, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 import Dashboard from "./Dashboard";
+import BookSeat from "./BookSeat";
 
 export default function ProtectedRoute() {
   const navigate = useNavigate();
@@ -13,10 +14,10 @@ export default function ProtectedRoute() {
     try {
       // @ts-ignore
       useAuthStore.persist.rehydrate();
-      if (!isAuth) {
-        alert("Not logged in");
-        navigate("/login");
-      }
+      // if (!isAuth) {
+      //   alert("Not logged in");
+      //   navigate("/login");
+      // }
     } catch (err) {
       console.log(err);
     }
@@ -28,8 +29,8 @@ export default function ProtectedRoute() {
       element: <Dashboard />,
     },
     {
-      path: "/book",
-      element: <h1>Book</h1>,
+      path: "/book/:id",
+      element: <BookSeat />,
     },
   ]);
 

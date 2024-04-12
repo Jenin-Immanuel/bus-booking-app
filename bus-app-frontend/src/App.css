@@ -1,2 +1,14 @@
+.economy {
+  color: white;
+  background-color: #43aa8b;
+}
 
+.female {
+  color: white;
+  background-color: #d2d2d2;
+  border: 3px solid rgb(241, 6, 225);
+}
 
+.female:hover {
+  background-color: pink;
+}

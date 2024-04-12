@@ -50,6 +50,9 @@ dependencies:
   react-router-dom:
     specifier: ^6.22.3
     version: 6.22.3(react-dom@18.2.0)(react@18.2.0)
+  seatchart:
+    specifier: ^0.1.0
+    version: 0.1.0
   tailwind-merge:
     specifier: ^2.2.2
     version: 2.2.2
@@ -2802,6 +2805,10 @@ packages:
     resolution: {integrity: sha512-CtuThmgHNg7zIZWAXi3AsyIzA3n4xx7aNyjwC2VJldO2LMVDhFK+63xGqq6CsJH4rTAt6/M+N4GhZiDYPx9eUw==}
     dependencies:
       loose-envify: 1.4.0
+    dev: false
+
+  /seatchart@0.1.0:
+    resolution: {integrity: sha512-YbE6Y+dP4wa/FGXwJdHJ14ivLdCB1Lti4hSK7T9HnDPhZQzoeb1BGlCxASRHWcD5KNbqackg0qsh0lc03KA5Uw==}
     dev: false
 
   /semver@6.3.1:

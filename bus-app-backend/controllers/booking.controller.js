@@ -3,6 +3,18 @@ const { SeatModel } = require("../models/seat.model")
 const { TicketModel } = require("../models/ticket.model")
 const { UserModel } = require("../models/user.model")
 
+const checkParams = require("../helpers/checkParams")
+
+const UserService = require("../services/user.service")
+const { BookingService } = require("../services/booking.service")
+const userService = new UserService(UserModel)
+const bookingService = new BookingService(
+  BusModel,
+  TicketModel,
+  userService,
+  SeatModel
+)
+
 async function generateTicket(seats, bus, user) {
   const totalCost = seats.reduce((acc, seat) => acc + seat.cost, 0)
 
@@ -16,68 +28,12 @@ async function generateTicket(seats, bus, user) {
   return ticket
 }
 
-/**
- *
- * @param {import('../models/seat.model').SeatModel} seat
- */
-function updateSeatDetails(seat, details) {}
-
-/**
- * Book a ticket
- * @param {import('express').Request} req
- * @param {import('express').Response} res
- * @returns {Promise<void>}
- */
 async function bookTicket(req, res) {
-  /**
-   * @typedef {Object} RequestBody
-   * @property {string} busId
-   * @property {{seatNo: number, name: string, age: number, gender: string}[]} seatDetails
-   */
-
-  /**
-   * @type {RequestBody}
-   */
   const { busId, seatDetails } = req.body
-  const email = req.email
-
-  const user = await UserModel.findOne({ email: email })
-  const bus = await BusModel.findById(busId).populate("seats")
-
-  const seatNos = seatDetails.map((seat) => seat.seatNo)
-  if (!bus) {
-    return res.status(404).json({ error: "Bus not found" })
-  }
-
-  const seats = bus.seats.filter((seat) => seatNos.includes(seat.seatNo))
-
-  // All seats are filtered
-  if (
-    !(
-      seats.length === seatNos.length &&
-      seatDetails.length === seatNos.length &&
-      seats.length === seatDetails.length
-    )
-  ) {
-    return res.status(400).json({ error: "Invalid seat numbers" })
-  }
-
-  // Serialize the details and objects
-  seatDetails.sort((a, b) => a.seatNo - b.seatNo)
-  seats.sort((a, b) => a.seatNo - b.seatNo)
-
-  for (let i = 0; i < seatDetails.length; i++) {
-    const { name, age, gender } = seatDetails[i]
-    seats[i].pName = name
-    seats[i].pAge = age
-    seats[i].pGender = gender
-    seats[i].status = "reserved"
-    await seats[i].save()
-  }
-
-  const ticket = await generateTicket(seats, bus, user)
-
-  return res.json(ticket)
+  const userId = req.userId
+  checkParams(busId, seatDetails, userId)
+  const ticket = await bookingService.bookNewTicket(busId, seatDetails, userId)
+  return res.status(200).json({ status: "success", data: ticket })
 }
 
 async function payment(req, res) {

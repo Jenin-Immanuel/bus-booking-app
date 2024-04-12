@@ -63,7 +63,7 @@ class BookingService {
     seatDetails.sort((a, b) => a.seatNo - b.seatNo)
     seats.sort((a, b) => a.seatNo - b.seatNo)
 
-    const session = await mongoose.session()
+    const session = await mongoose.startSession()
 
     await session.withTransaction(async () => {
       const updatePromises = seats.map((seat, index) => {
@@ -84,22 +84,33 @@ class BookingService {
       })
       await Promise.all(updatePromises)
     })
+  }
 
-    // for (let i = 0; i < seatDetails.length; i++) {
-    //   const { name, age, gender } = seatDetails[i]
-    //   seats[i].pName = name
-    //   seats[i].pAge = age
-    //   seats[i].pGender = gender
-    //   seats[i].status = "reserved"
-    //   await seats[i].save()
-    // }
+  async getSeatsById(seatsId) {
+    return this.seatModel.find({ _id: { $in: seatsId } })
+  }
+
+  async generateTicket(seats, bus, user) {
+    const totalCost = seats.reduce((acc, seat) => acc + seat.cost, 0)
+
+    const ticket = await TicketModel.create({
+      user: user._id,
+      bus: bus._id,
+      seats: seats.map((seat) => ({ seat: seat._id })),
+      totalCost,
+      bookingDate: new Date(),
+    })
+    return ticket
   }
 
   async bookNewTicket(busId, seatDetails, userId) {
     const user = await this.userService.getUserById(userId)
     const bus = await this.getBusById(busId)
-
-    const seats = this.filterAndCreateSeats(seatDetails, bus)
+    const seatIdList = seatDetails.map((seat) => seat.seatId)
+    await this.filterAndCreateSeats(seatDetails, bus)
+    const seats = await this.getSeatsById(seatIdList)
+    const ticket = await this.generateTicket(seats, bus, user)
+    return ticket
   }
 }
 

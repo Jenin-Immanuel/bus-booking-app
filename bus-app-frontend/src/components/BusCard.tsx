@@ -2,6 +2,8 @@ import { BusCardProps } from "@/types";
 import { Button } from "./ui/button";
 import React from "react";
 
+import { useNavigate } from "react-router-dom";
+
 function getTime(date: Date) {
   return new Date(date).toTimeString().slice(0, 5);
 }
@@ -11,8 +13,9 @@ function getBoardingDate(date: Date): string {
 }
 
 export default function BusCard(props: BusCardProps) {
+  const navigate = useNavigate();
   async function handleViewSeats(id: string) {
-    console.log("View Seats", id);
+    navigate(`/p/book/${id}`);
   }
 
   return (

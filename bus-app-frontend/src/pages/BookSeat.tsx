@@ -1,84 +1,35 @@
-import Seatchart from "@/components/ui/seatchart";
-
-import { useRef, useState, useEffect } from "react";
-import SeatchartJS, { Options } from "seatchart";
-
+import BookSeatComp from "@/components/BookSeatComp";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
-import "@/App.css";
-import "@/css/chart.min.css";
+import { BusDetails } from "@/types";
+import { useParams } from "react-router-dom";
 
-const BookSeat = () => {
-  const [busDetails, setBusDetails] = useState({} as any);
+// Zustand stores
+import useBusStore from "@/stores/busStore";
 
-  useEffect(() => {}, []);
+export default function BookSeat() {
+  const { id } = useParams();
+  const [busDetails, setBusDetails] = useState({} as BusDetails);
+  const [render, setRender] = useState(false);
+  const setBus = useBusStore((state) => state.setBus);
 
-  const rowCount = 7;
-  const colCount = 3;
-  const seatPrice = 1000;
-  const options: Options = {
-    map: {
-      rows: rowCount,
-      columns: colCount,
-      seatTypes: {
-        default: {
-          label: "Available",
-          cssClass: "economy",
-          price: seatPrice,
-        },
-        female: {
-          label: "Female",
-          cssClass: "female",
-          price: seatPrice,
-          seats: [{ row: 0, col: 1 }],
-        },
-      },
-      columnSpacers: [1],
-      indexerRows: {
-        visible: false,
-      },
-      indexerColumns: {
-        visible: false,
-      },
-      seatLabel: (index) => {
-        return `${index.row * colCount + index.col + 1}`;
-      },
-      reservedSeats: [
-        { row: 0, col: 0 },
-        { row: 0, col: 1 },
-      ],
-    },
-    cart: {
-      currency: "₹ ",
-    },
-  };
-  const seatchartRef = useRef<SeatchartJS>();
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await axios.get(`http://localhost:5555/search/bus?id=${id}`, {
+        withCredentials: true,
+      });
 
-  // const handleClick = () => {
-  //   const index = { row: 0, col: 2 };
-  //   const seat = seatchartRef.current?.getSeat(index);
-
-  //   seatchartRef.current?.setSeat(index, {
-  //     state: seat?.state === "selected" ? "available" : "selected",
-  //   });
-  // };
-
-  seatchartRef.current?.addEventListener("submit", async (event) => {
-    console.log(event.cart);
-    // const cart = event.cart;
-    // cart.forEach(async (_) => {
-    //   const x = await fetch("http://localhost:5555/user/me");
-    //   const data = await x.json();
-    //   console.log(data);
-    // });
-  });
-
+      if (res.data.status === "error") {
+        return alert(res.data.message);
+      }
+      setBusDetails(res.data.data[0] as BusDetails);
+      setBus(res.data.data[0] as BusDetails);
+      setRender(true);
+    };
+    fetchData();
+  }, []);
   return (
-    <div className="w-screen h-screen">
-      {/* <button onClick={handleClick}>Toggle Seat</button> */}
-      <Seatchart ref={seatchartRef} options={options} />
-    </div>
+    <>{render ? <BookSeatComp {...busDetails} /> : <div>Loading...</div>}</>
   );
-};
-
-export default BookSeat;
+}

@@ -28,12 +28,20 @@ async function generateTicket(seats, bus, user) {
   return ticket
 }
 
-async function bookTicket(req, res) {
-  const { busId, seatDetails } = req.body
-  const userId = req.userId
-  checkParams(busId, seatDetails, userId)
-  const ticket = await bookingService.bookNewTicket(busId, seatDetails, userId)
-  return res.status(200).json({ status: "success", data: ticket })
+async function bookTicket(req, res, next) {
+  try {
+    const { busId, seatDetails } = req.body
+    const userId = req.userId
+    checkParams(busId, seatDetails, userId)
+    const ticket = await bookingService.bookNewTicket(
+      busId,
+      seatDetails,
+      userId
+    )
+    return res.status(200).json({ status: "success", data: ticket })
+  } catch (err) {
+    next(err)
+  }
 }
 
 async function payment(req, res) {

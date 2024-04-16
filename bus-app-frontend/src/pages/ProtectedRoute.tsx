@@ -4,6 +4,7 @@ import { useEffect } from "react";
 
 import Dashboard from "./Dashboard";
 import BookSeat from "./BookSeat";
+import BookingForm from "./BookingForm";
 
 export default function ProtectedRoute() {
   const navigate = useNavigate();
@@ -31,6 +32,10 @@ export default function ProtectedRoute() {
     {
       path: "/book/:id",
       element: <BookSeat />,
+    },
+    {
+      path: "/book/details",
+      element: <BookingForm />,
     },
   ]);
 

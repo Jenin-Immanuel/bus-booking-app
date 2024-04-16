@@ -3,7 +3,9 @@
   font-family: Arial, Helvetica, sans-serif;
   font-size: 16px;
   padding: 25px;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: space-around;
+  height: 100%;
 }
 .sc-right-container {
   margin-left: 75px;

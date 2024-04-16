@@ -20,6 +20,7 @@ async function searchBus(req, res) {
 
 async function getBusById(req, res, next) {
   const { id } = req.query
+  console.log(id)
   checkParams(id)
   try {
     const bus = await searchService.getBusById(id)

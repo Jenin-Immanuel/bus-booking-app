@@ -27,7 +27,7 @@ class SearchService {
   }
 
   async getBusById(id) {
-    const bus = await this.busModel.find({ _id: id })
+    const bus = await this.busModel.find({ _id: id }).populate("seats")
     if (!bus) {
       throw new Error("Bus not found")
     }
@@ -94,14 +94,14 @@ class BookingService {
     })
   }
 
-  async getSeatsById(seatsId) {
-    return this.seatModel.find({ _id: { $in: seatsId } })
+  async getSeatsBySeatNumber(seatsId) {
+    return this.seatModel.find({ seatNo: { $in: seatsId } })
   }
 
   async generateTicket(seats, bus, user) {
     const totalCost = seats.reduce((acc, seat) => acc + seat.cost, 0)
 
-    const ticket = await TicketModel.create({
+    const ticket = await this.ticketModel.create({
       user: user._id,
       bus: bus._id,
       seats: seats.map((seat) => ({ seat: seat._id })),
@@ -114,9 +114,9 @@ class BookingService {
   async bookNewTicket(busId, seatDetails, userId) {
     const user = await this.userService.getUserById(userId)
     const bus = await this.getBusById(busId)
-    const seatIdList = seatDetails.map((seat) => seat.seatId)
+    const seatIdList = seatDetails.map((seat) => seat.seatNo)
     await this.filterAndCreateSeats(seatDetails, bus)
-    const seats = await this.getSeatsById(seatIdList)
+    const seats = await this.getSeatsBySeatNumber(seatIdList)
     const ticket = await this.generateTicket(seats, bus, user)
     return ticket
   }

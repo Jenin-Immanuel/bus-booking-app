@@ -101,6 +101,10 @@ class BookingService {
   async generateTicket(seats, bus, user) {
     const totalCost = seats.reduce((acc, seat) => acc + seat.cost, 0)
 
+    await this.busModel.findByIdAndUpdate(bus._id, {
+      $inc: { bookedSeats: seats.length },
+    })
+
     const ticket = await this.ticketModel.create({
       user: user._id,
       bus: bus._id,
@@ -108,6 +112,7 @@ class BookingService {
       totalCost,
       bookingDate: new Date(),
     })
+    await ticket.startExpirationTimer(ticket._id)
     return ticket
   }
 

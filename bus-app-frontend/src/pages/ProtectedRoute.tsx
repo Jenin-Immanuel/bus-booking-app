@@ -37,6 +37,14 @@ export default function ProtectedRoute() {
       path: "/book/details",
       element: <BookingForm />,
     },
+    {
+      path: "/tickets",
+      element: <div>Tickets</div>,
+    },
+    {
+      path: "/tickets/:id",
+      element: <div>Tickets with id</div>,
+    },
   ]);
 
   return children;

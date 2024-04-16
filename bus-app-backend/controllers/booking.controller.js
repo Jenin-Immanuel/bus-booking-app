@@ -15,6 +15,12 @@ const bookingService = new BookingService(
   SeatModel
 )
 
+async function getTicketsOfUser(req, res) {
+  const userId = req.userId
+  const tickets = await bookingService.getTicketsOfUser(userId)
+  return res.status(200).json({ status: "success", data: tickets })
+}
+
 async function generateTicket(seats, bus, user) {
   const totalCost = seats.reduce((acc, seat) => acc + seat.cost, 0)
 

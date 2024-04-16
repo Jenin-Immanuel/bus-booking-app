@@ -98,6 +98,11 @@ class BookingService {
     return this.seatModel.find({ seatNo: { $in: seatsId } })
   }
 
+  async getTicketsOfUser(userId) {
+    const tickets = await this.ticketModel.find({ user: userId })
+    return tickets
+  }
+
   async generateTicket(seats, bus, user) {
     const totalCost = seats.reduce((acc, seat) => acc + seat.cost, 0)
 

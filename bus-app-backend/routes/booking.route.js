@@ -13,5 +13,6 @@ router.use(logger, verifyToken)
 
 router.route("/book").post(bookTicket)
 router.route("/payment").post(payment)
+router.route("/getTickets").get(getTicketsOfUser)
 
 module.exports = router

@@ -18,7 +18,8 @@ import { useToast } from "@/components/ui/use-toast";
 
 import { useAuthStore } from "@/stores/authStore";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -114,8 +115,13 @@ export default function Dashboard() {
       <div className="p-4 md:px-20 md:mt-8">
         <div className="w-full flex justify-between">
           <h1 className="text-xl md:text-3xl font-bold">Dashboard</h1>
-          <div className="md:text-xl md:pr-20 lg:pr-40">
-            Welcome, <span className="text-green-500">{data.name}</span>
+          <div className="md:text-xl md:pr-20 lg:pr-40 flex justify-center items-center gap-2 md:gap-5">
+            <div>
+              Welcome, <span className="text-green-500">{data.name}</span>
+            </div>
+            <Button>
+              <Link to="/p/tickets">My Tickets</Link>
+            </Button>
           </div>
         </div>
       </div>

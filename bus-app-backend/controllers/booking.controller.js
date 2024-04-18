@@ -82,4 +82,4 @@ async function payment(req, res) {
   return res.json(returnObj)
 }
 
-module.exports = { bookTicket, payment }
+module.exports = { bookTicket, payment, getTicketsOfUser }

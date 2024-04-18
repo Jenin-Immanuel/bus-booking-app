@@ -5,7 +5,11 @@ const verifyToken = require("../middlewares/verifyToken")
 const logger = require("../middlewares/logger")
 
 // Business Logic
-const { bookTicket, payment } = require("../controllers/booking.controller")
+const {
+  bookTicket,
+  payment,
+  getTicketsOfUser,
+} = require("../controllers/booking.controller")
 
 const router = express.Router()
 

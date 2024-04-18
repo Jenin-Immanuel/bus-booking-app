@@ -13,7 +13,7 @@ export interface BusCardProps {
   __v: number;
 }
 
-interface SeatDetails {
+export interface SeatDetails {
   _id: string;
   seatNo: number;
   status: string;
@@ -35,4 +35,19 @@ export interface BusDetails {
   endTime: Date;
   maxSeats: number;
   seats: SeatDetails[];
+}
+
+interface SeatExtended {
+  seat: SeatDetails;
+  _id: string;
+}
+
+export interface TicketDetails {
+  _id: string;
+  user: string;
+  bus: BusDetails;
+  seats: SeatExtended[];
+  totalCost: number;
+  status: "reserved" | "booked" | "cancelled";
+  bookingDate: Date;
 }

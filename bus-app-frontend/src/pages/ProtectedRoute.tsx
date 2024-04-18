@@ -5,7 +5,8 @@ import { useEffect } from "react";
 import Dashboard from "./Dashboard";
 import BookSeat from "./BookSeat";
 import BookingForm from "./BookingForm";
-
+import Tickets from "./Tickets";
+import TicketDetailsComp from "./TicketDetails";
 export default function ProtectedRoute() {
   const navigate = useNavigate();
   let isAuth = false;
@@ -39,11 +40,11 @@ export default function ProtectedRoute() {
     },
     {
       path: "/tickets",
-      element: <div>Tickets</div>,
+      element: <Tickets />,
     },
     {
       path: "/tickets/:id",
-      element: <div>Tickets with id</div>,
+      element: <TicketDetailsComp />,
     },
   ]);
 

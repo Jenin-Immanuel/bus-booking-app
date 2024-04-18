@@ -28,6 +28,10 @@ import { Input } from "@/components/ui/input";
 import { useForm, useFieldArray } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 
+import { API_URL } from "@/utils/constants";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 // Define an interface for a single registration unit
 interface RegistrationUnit {
   name: string;
@@ -40,6 +44,8 @@ export default function BookingFormComp() {
   const seats = useCartStore((state) => state.seats);
   const bus = useBusStore((state) => state.bus);
   const busId = bus._id;
+
+  const navigate = useNavigate();
   // Use the useForm hook to create a form instance
   const form = useForm<{ registrations: RegistrationUnit[] }>({
     defaultValues: {
@@ -65,7 +71,7 @@ export default function BookingFormComp() {
   });
 
   // Define a submit handler
-  const onSubmit = (data: { registrations: RegistrationUnit[] }) => {
+  const onSubmit = async (data: { registrations: RegistrationUnit[] }) => {
     const reqBody = { busId, seatDetails: [] as Record<string, unknown>[] };
     data.registrations.forEach((passenger) => {
       reqBody.seatDetails.push({
@@ -76,7 +82,14 @@ export default function BookingFormComp() {
       });
     });
 
-    console.log(reqBody);
+    const res = await axios.post(API_URL + "/booking/book", reqBody, {
+      withCredentials: true,
+    });
+    if (res.data.status === "error") {
+      alert(res.data.message);
+    }
+
+    navigate(`/p/tickets/${res.data.data._id}`);
   };
 
   return (

@@ -99,7 +99,10 @@ class BookingService {
   }
 
   async getTicketsOfUser(userId) {
-    const tickets = await this.ticketModel.find({ user: userId })
+    const tickets = await this.ticketModel
+      .find({ user: userId })
+      .populate("bus")
+      .populate("seats.seat")
     return tickets
   }
 
@@ -117,7 +120,7 @@ class BookingService {
       totalCost,
       bookingDate: new Date(),
     })
-    await ticket.startExpirationTimer(ticket._id)
+    // await ticket.startExpirationTimer(ticket._id)
     return ticket
   }
 

@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { TicketDetails } from "@/types";
 
 import useTicketStore from "@/stores/ticketStore";
+import TicketDisplay from "@/components/TicketDisplay";
 
 export default function Tickets() {
   const [tickets, setTickets_] = useState<TicketDetails[]>([]);
@@ -43,30 +44,47 @@ export default function Tickets() {
         <div>Loading...</div>
       ) : (
         <>
-          <div>
-            {tickets.map((ticket, index) => (
-              <div key={ticket._id}>
-                <h3>Bus: {ticket.bus.provider}</h3>
-                <h4>Seats:</h4>
-                <ul>
-                  {ticket.seats.map((seat) => (
-                    <li key={seat._id}>{seat.seat.seatNo}</li>
-                  ))}
-                </ul>
-                <p>Total Cost: {ticket.totalCost}</p>
-                <p>Status: {ticket.status}</p>
-                <p>
-                  Booking Date: {new Date(ticket.bookingDate).toDateString()}
-                </p>
-                <Button onClick={() => handleNavigation(index)}>
-                  View Details
-                </Button>
+          <div className="w-full max-w-screen-lg mx-2 md:mx-auto my-auto mt-10 flex flex-col gap-2 md:gap-4">
+            <div className="w-full h-full flex justify-around items-center">
+              <div>
+                <h1 className="text-xl md:text-3xl font-bold">My Tickets</h1>
               </div>
-            ))}
+              <div className="flex justify-center items-center">
+                <Link
+                  to="/p/dashboard"
+                  className="flex justify-center items-center"
+                >
+                  <Button variant="secondary" className="mt-5">
+                    Back to dashboard
+                  </Button>
+                </Link>
+              </div>
+            </div>
+            <div>
+              <ul className="flex flex-col gap-4 md:gap-6 mt-10">
+                {tickets.map((ticket, index) => (
+                  <TicketDisplay key={index} ticket={ticket} />
+                  // <div key={ticket._id}>
+                  //   <h3>Bus: {ticket.bus.provider}</h3>
+                  //   <h4>Seats:</h4>
+                  //   <ul>
+                  //     {ticket.seats.map((seat) => (
+                  //       <li key={seat._id}>{seat.seat.seatNo}</li>
+                  //     ))}
+                  //   </ul>
+                  //   <p>Total Cost: {ticket.totalCost}</p>
+                  //   <p>Status: {ticket.status}</p>
+                  //   <p>
+                  //     Booking Date: {new Date(ticket.bookingDate).toDateString()}
+                  //   </p>
+                  //   <Button onClick={() => handleNavigation(index)}>
+                  //     View Details
+                  //   </Button>
+                  // </div>
+                ))}
+              </ul>
+            </div>
           </div>
-          <Button variant="secondary" className="mt-5">
-            <Link to="/p/dashboard">Back to dashboard</Link>
-          </Button>
         </>
       )}
     </>

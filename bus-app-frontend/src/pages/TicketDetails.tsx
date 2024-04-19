@@ -8,7 +8,7 @@ import axios from "axios";
 
 import { API_URL } from "@/utils/constants";
 import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
+import { cn, dateFormatter } from "@/lib/utils";
 
 import { TicketDetails } from "@/types";
 import SeatDisplay from "@/components/SeatDisplay";
@@ -124,11 +124,16 @@ export default function TicketDetailsComp() {
                 Status: <span className="text-green-500">{ticket.status}</span>
               </p>
               <p>
-                Booking Date:{" "}
+                Start:{" "}
                 <span className="text-green-500">
-                  {new Date(ticket.bookingDate).toDateString()}{" "}
-                  {new Date(ticket.bookingDate).toTimeString()}
+                  {dateFormatter.format(new Date(ticket.bus.startTime))}
                 </span>
+              </p>
+              <p>
+                End:{" "}
+                <span className="text-green-500">
+                  {dateFormatter.format(new Date(ticket.bus.endTime))}
+                </span>{" "}
               </p>
 
               <div className="flex justify-center items-center">

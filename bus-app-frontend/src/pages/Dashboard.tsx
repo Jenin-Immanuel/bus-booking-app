@@ -116,9 +116,9 @@ export default function Dashboard() {
             <div>
               Welcome, <span className="text-green-500">{data.name}</span>
             </div>
-            <Button>
-              <Link to="/p/tickets">My Tickets</Link>
-            </Button>
+            <Link to="/p/tickets">
+              <Button>My Tickets</Button>
+            </Link>
           </div>
         </div>
       </div>

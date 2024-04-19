@@ -21,6 +21,18 @@ async function getTicketsOfUser(req, res) {
   return res.status(200).json({ status: "success", data: tickets })
 }
 
+async function getTicketById(req, res, next) {
+  const userId = req.userId
+  const ticketId = req.params.ticketId
+  try {
+    checkParams(userId, ticketId)
+    const ticket = await bookingService.getTicketById(ticketId)
+    return res.status(200).json({ status: "success", data: ticket })
+  } catch (err) {
+    next(err)
+  }
+}
+
 async function generateTicket(seats, bus, user) {
   const totalCost = seats.reduce((acc, seat) => acc + seat.cost, 0)
 
@@ -82,4 +94,4 @@ async function payment(req, res) {
   return res.json(returnObj)
 }
 
-module.exports = { bookTicket, payment, getTicketsOfUser }
+module.exports = { bookTicket, payment, getTicketsOfUser, getTicketById }

@@ -106,6 +106,15 @@ class BookingService {
     return tickets
   }
 
+  async getTicketById(ticketId) {
+    const ticket = await this.ticketModel
+      .findById(ticketId)
+      .populate("bus")
+      .populate("seats.seat")
+      .populate("user")
+    return ticket
+  }
+
   async generateTicket(seats, bus, user) {
     const totalCost = seats.reduce((acc, seat) => acc + seat.cost, 0)
 

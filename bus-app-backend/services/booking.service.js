@@ -129,7 +129,7 @@ class BookingService {
       totalCost,
       bookingDate: new Date(),
     })
-    // await ticket.startExpirationTimer(ticket._id)
+    await ticket.startExpirationTimer(ticket._id)
     return ticket
   }
 

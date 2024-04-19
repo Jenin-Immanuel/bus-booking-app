@@ -75,8 +75,8 @@ export default function TicketDetailsComp() {
       { ticketId: ticket._id },
       { withCredentials: true }
     );
-    if (res.data.status === "error") {
-      return alert(res.data.message);
+    if (res.data.error) {
+      return alert(res.data.error);
     }
     alert(res.data.message);
     navigate(`/p/dashboard`);

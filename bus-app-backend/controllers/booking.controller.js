@@ -68,12 +68,19 @@ async function payment(req, res) {
     .populate("seats")
     .populate("bus")
     .populate("user")
+  console.log("Ticket: ", ticket)
+  const bus = await BusModel.findById(ticket.bus._id).populate("seats")
+  console.log("Bus: ", bus)
+  let bkdSeats = new Set()
+  ticket.seats.forEach((seat) => bkdSeats.add(seat.seat.toString()))
+  bus.seats.forEach((seat) =>
+    seat.status === "paid" ? bkdSeats.add(seat._id.toString()) : null
+  )
 
-  ticket.bus.bookedSeats += ticket.seats.length
-
+  await BusModel.findByIdAndUpdate(bus._id, { bookedSeats: bkdSeats.size })
+  // Set Booked Seats
   ticket.seats.forEach(async (seat) => {
-    seat.status = "paid"
-    await seat.save()
+    await SeatModel.findByIdAndUpdate(seat.seat, { status: "paid" })
   })
   if (!ticket) {
     return res.status(404).json({ error: "Ticket not found" })
@@ -87,6 +94,15 @@ async function payment(req, res) {
   await ticket.save()
   await ticket.bus.save()
 
+  // let bkdSeats = new Set()
+  // ticket.seats.forEach((seat) => bkdSeats.add(seat.seat))
+  // bus.seats.forEach((seat) =>
+  //   seat.status === "booked" ? bkdSeats.add(seat.seat._id) : null
+  // )
+  // // Set Booked Seats
+  // console.log("Booked Seats: ", bkdSeats)
+  ticket.bus.bookedSeats = bkdSeats.size
+  await ticket.bus.save()
   const returnObj = {
     message: "Ticket booked successfully",
     ticket,

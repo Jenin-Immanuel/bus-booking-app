@@ -41,7 +41,7 @@ const TicketSchema = new mongoose.Schema({
 TicketSchema.methods.startExpirationTimer = async (ticketId) => {
   let timeoutId
   // Set expirationDuration for 10 minutes which should be then used in a setTimeout
-  const expirationDuration = 10 * 1000
+  const expirationDuration = 10 * 60 * 1000
 
   async function expireLogic() {
     try {

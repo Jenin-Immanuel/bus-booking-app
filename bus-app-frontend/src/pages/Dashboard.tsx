@@ -66,7 +66,7 @@ export default function Dashboard() {
   async function handleLogout() {
     logout();
     alert("User logged out successfully");
-    navigate("/login");
+    navigate("/");
   }
 
   async function onSubmit(data: z.infer<typeof searchSchema>) {
@@ -75,9 +75,6 @@ export default function Dashboard() {
     }-${data.startTime.getDate()}-${data.startTime.getFullYear()}`;
     let url = new URL(API_URL + "/search");
 
-    // url.searchParams.set("start", data.from);
-    // url.searchParams.set("end", data.to);
-    // url.searchParams.set("startTime", formattedDate);
     const res = await fetch(url.toString(), {
       method: "POST",
       headers: { "Content-Type": "application/json" },

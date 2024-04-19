@@ -12,10 +12,13 @@ import { Toaster } from "./components/ui/toaster.tsx";
 const router = createBrowserRouter([
   { path: "/", element: <Landing /> },
   { path: "/login", element: <Login /> },
+  { path: "/signup", element: <SignUp /> },
+
   { path: "/p/*", element: <ProtectedRoute /> },
 ]);
 
 import "./index.css";
+import SignUp from "./pages/SignUp.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

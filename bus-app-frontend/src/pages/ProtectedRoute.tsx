@@ -1,6 +1,7 @@
 import { useAuthStore } from "@/stores/authStore";
 import { useRoutes, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { useToast } from "@/components/ui/use-toast";
 
 import Dashboard from "./Dashboard";
 import BookSeat from "./BookSeat";
@@ -10,16 +11,21 @@ import TicketDetailsComp from "./TicketDetails";
 export default function ProtectedRoute() {
   const navigate = useNavigate();
   let isAuth = false;
+  const { toast } = useToast();
 
   isAuth = useAuthStore((state) => state.isAuth);
   useEffect(() => {
     try {
       // @ts-ignore
       useAuthStore.persist.rehydrate();
-      // if (!isAuth) {
-      //   alert("Not logged in");
-      //   navigate("/login");
-      // }
+      if (!isAuth) {
+        toast({
+          title: "Login",
+          description: "Please login to access this page",
+          variant: "destructive",
+        });
+        navigate("/login");
+      }
     } catch (err) {
       console.log(err);
     }

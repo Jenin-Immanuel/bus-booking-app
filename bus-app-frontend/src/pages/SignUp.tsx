@@ -22,6 +22,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { useEffect } from "react";
+import { useAuthStore } from "@/stores/authStore";
+
 import { useToast } from "@/components/ui/use-toast";
 import axios from "axios";
 import { API_URL } from "@/utils/constants";
@@ -38,6 +41,7 @@ const formSchema = z.object({
 });
 
 export default function SignUp() {
+  const isAuth = useAuthStore((state) => state.isAuth);
   const { toast } = useToast();
   const navigate = useNavigate();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -49,6 +53,10 @@ export default function SignUp() {
       confirmPassword: "",
     },
   });
+
+  useEffect(() => {
+    if (isAuth) navigate("/p/dashboard");
+  }, []);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (values.password !== values.confirmPassword) {

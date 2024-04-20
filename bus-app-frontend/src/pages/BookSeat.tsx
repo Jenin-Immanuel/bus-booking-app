@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import { BusDetails } from "@/types";
 import { useParams } from "react-router-dom";
+import { API_URL } from "@/utils/constants";
 
 // Zustand stores
 import useBusStore from "@/stores/busStore";
@@ -16,7 +17,7 @@ export default function BookSeat() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await axios.get(`http://localhost:5555/search/bus?id=${id}`, {
+      const res = await axios.get(`${API_URL}/search/bus?id=${id}`, {
         withCredentials: true,
       });
 

@@ -1,1 +1,4 @@
-export const API_URL: string = "http://localhost:5555";
+console.log(import.meta.env.VITE_API_URL);
+
+export const API_URL: string =
+  import.meta.env.VITE_API_URL || "http://localhost:5556";

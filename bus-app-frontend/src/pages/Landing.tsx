@@ -40,7 +40,7 @@ export default function Landing() {
           backgroundColor="black"
           rangeY={800}
           particleCount={500}
-          baseHue={50}
+          baseHue={300}
           className="flex items-center flex-col justify-center px-2 md:px-10 py-4 w-full h-full md:gap-6"
         >
           <h2 className="text-white text-2xl md:text-6xl font-bold text-center flex justify-center items-center gap-2">

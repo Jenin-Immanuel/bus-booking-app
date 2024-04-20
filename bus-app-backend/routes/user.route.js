@@ -26,5 +26,9 @@ router.route("/hello").get(verifyToken, (req, res) => {
   res.json({ email: req.email })
 })
 router.route("/me").get(verifyToken, me)
+router.route("/logout").get(verifyToken, (req, res) => {
+  res.cookie("accessToken", "", { maxAge: 0, httpOnly: true })
+  return res.json({ status: "success", message: "You have been logged out" })
+})
 
 module.exports = router

@@ -26,7 +26,7 @@ import { z } from "zod";
 import { Feather, CalendarIcon, SearchIcon } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import BusCard from "@/components/BusCard";
-
+import axios from "axios";
 interface UserData {
   name: string;
   email: string;
@@ -64,8 +64,11 @@ export default function Dashboard() {
   }, []);
 
   async function handleLogout() {
+    const res = await axios.get(`${API_URL}/user/logout`, {
+      withCredentials: true,
+    });
     logout();
-    alert("User logged out successfully");
+    alert(res.data.message);
     navigate("/");
   }
 

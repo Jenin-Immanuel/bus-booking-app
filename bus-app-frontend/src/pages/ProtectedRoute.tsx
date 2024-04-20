@@ -8,6 +8,8 @@ import BookSeat from "./BookSeat";
 import BookingForm from "./BookingForm";
 import Tickets from "./Tickets";
 import TicketDetailsComp from "./TicketDetails";
+import axios from "axios";
+import { API_URL } from "@/utils/constants";
 export default function ProtectedRoute() {
   const navigate = useNavigate();
   let isAuth = false;
@@ -15,10 +17,12 @@ export default function ProtectedRoute() {
 
   isAuth = useAuthStore((state) => state.isAuth);
   useEffect(() => {
-    try {
-      // @ts-ignore
-      useAuthStore.persist.rehydrate();
-      if (!isAuth) {
+    (async () => {
+      try {
+        await axios.get(`${API_URL}/user/me`, {
+          withCredentials: true,
+        });
+      } catch (err) {
         toast({
           title: "Login",
           description: "Please login to access this page",
@@ -26,9 +30,7 @@ export default function ProtectedRoute() {
         });
         navigate("/login");
       }
-    } catch (err) {
-      console.log(err);
-    }
+    })();
   }, []);
 
   const children = useRoutes([

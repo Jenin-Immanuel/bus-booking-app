@@ -9,6 +9,8 @@ import { useNavigate } from "react-router-dom";
 import "@/App.css";
 import "@/css/chart.min.css";
 
+import { useEffect } from "react";
+
 import { BusDetails } from "@/types";
 
 // Zustand stores
@@ -71,15 +73,18 @@ const BookSeatComp = (bus: BusDetails) => {
 
   const seatchartRef = useRef<SeatchartJS>();
 
-  seatchartRef.current?.addEventListener("submit", async (event) => {
-    let selectedSeats: string[] = [];
-    event.cart.forEach((seat) => {
-      selectedSeats.push(seat.label);
-    });
+  useEffect(() => {
+    seatchartRef.current?.addEventListener("submit", async (event) => {
+      console.log(1);
+      let selectedSeats: string[] = [];
+      event.cart.forEach((seat) => {
+        selectedSeats.push(seat.label);
+      });
 
-    setSeats(selectedSeats);
-    navigate("/p/book/details");
-  });
+      setSeats(selectedSeats);
+      navigate("/p/book/details");
+    });
+  }, []);
 
   return (
     <div className="w-screen h-screen overflow-hidden flex flex-col text-center">

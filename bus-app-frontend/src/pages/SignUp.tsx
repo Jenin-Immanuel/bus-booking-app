@@ -71,7 +71,7 @@ export default function SignUp() {
       withCredentials: true,
     });
     const data = res.data;
-    if (data === "error") {
+    if (data.status === "error") {
       toast({
         title: "Error",
         description: data.message,

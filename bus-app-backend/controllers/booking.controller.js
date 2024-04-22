@@ -70,7 +70,6 @@ async function payment(req, res) {
     .populate("user")
   console.log("Ticket: ", ticket)
   const bus = await BusModel.findById(ticket.bus._id).populate("seats")
-  console.log("Bus: ", bus)
   let bkdSeats = new Set()
   ticket.seats.forEach((seat) => bkdSeats.add(seat.seat.toString()))
   bus.seats.forEach((seat) =>
@@ -94,15 +93,6 @@ async function payment(req, res) {
   await ticket.save()
   await ticket.bus.save()
 
-  // let bkdSeats = new Set()
-  // ticket.seats.forEach((seat) => bkdSeats.add(seat.seat))
-  // bus.seats.forEach((seat) =>
-  //   seat.status === "booked" ? bkdSeats.add(seat.seat._id) : null
-  // )
-  // // Set Booked Seats
-  // console.log("Booked Seats: ", bkdSeats)
-  ticket.bus.bookedSeats = bkdSeats.size
-  await ticket.bus.save()
   const returnObj = {
     message: "Ticket booked successfully",
     ticket,

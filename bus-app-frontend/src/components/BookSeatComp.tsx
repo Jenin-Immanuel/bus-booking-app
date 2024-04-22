@@ -87,7 +87,7 @@ const BookSeatComp = (bus: BusDetails) => {
   }, []);
 
   return (
-    <div className="w-screen h-screen overflow-hidden flex flex-col text-center">
+    <div className="w-screen h-screen flex flex-col text-center">
       <h1 className="mt-10 text-5xl font-bold">Seat Map</h1>
       <Seatchart ref={seatchartRef} options={options} />
       <div className="mb-10">

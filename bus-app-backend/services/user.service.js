@@ -27,7 +27,7 @@ class UserService {
       if (users[i].email === email) {
         err = "User already exists"
         console.log(err)
-        throw new Error(err)
+        return { error: err }
       }
     }
     return {}
@@ -39,7 +39,7 @@ class UserService {
 
     const err = this.checkIfUserExists(users, email)
     if (err.error) {
-      return err
+      throw new Error(err.error)
     }
 
     const hashedPassword = await this.hashPassword(password)

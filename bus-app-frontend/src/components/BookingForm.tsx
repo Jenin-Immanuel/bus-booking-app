@@ -81,7 +81,6 @@ export default function BookingFormComp() {
         gender: passenger.gender,
       });
     });
-
     const res = await axios.post(API_URL + "/booking/book", reqBody, {
       withCredentials: true,
     });
@@ -113,7 +112,7 @@ export default function BookingFormComp() {
                       <FormLabel>Name</FormLabel>
 
                       <FormControl>
-                        <Input placeholder="Enter name" {...field} />
+                        <Input placeholder="Enter name" required {...field} />
                       </FormControl>
                       <FormMessage>
                         {errors.registrations?.[index]?.name?.message}

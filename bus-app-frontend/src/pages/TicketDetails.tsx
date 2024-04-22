@@ -12,11 +12,13 @@ import { cn, dateFormatter } from "@/lib/utils";
 
 import { TicketDetails } from "@/types";
 import SeatDisplay from "@/components/SeatDisplay";
+import { useToast } from "@/components/ui/use-toast";
 
 // TODO: Add the expiration time in the details
 export default function TicketDetailsComp() {
   const params = useParams();
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const [ticket, setTicket] = useState<TicketDetails>({} as TicketDetails);
   const [isLoading, setIsLoading] = useState(true);
@@ -47,6 +49,15 @@ export default function TicketDetailsComp() {
       if (res.data.status === "error") {
         return alert(res.data.message);
       }
+      const data = res.data.data;
+      if (data.status === "reserved") {
+        toast({
+          title: "Make your payment",
+          description:
+            "Your ticket will be cancelled if you don't make payment from 10 minutes of reservation",
+        });
+      }
+
       setTicket(res.data.data as TicketDetails);
       setIsLoading(false);
     };

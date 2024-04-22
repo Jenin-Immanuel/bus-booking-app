@@ -3,7 +3,9 @@ import { API_URL } from "@/utils/constants";
 import { create } from "zustand";
 
 import { persist } from "zustand/middleware";
+import axios from "axios";
 
+import { useToast } from "@/components/ui/use-toast";
 interface AuthStore {
   name: string | undefined;
   email: string | undefined;
@@ -40,12 +42,23 @@ export const useAuthStore = create<AuthStore>(
       email: data.email,
       login: (name: string, email: string) =>
         set({ isAuth: true, name, email }),
-      logout: () => {
-        set({
-          isAuth: false,
-          name: undefined,
-          email: undefined,
-        });
+      logout: async () => {
+        try {
+          await axios.get(API_URL + "/user/logout", { withCredentials: true });
+          set({
+            isAuth: false,
+            name: undefined,
+            email: undefined,
+          });
+        } catch (err) {
+          const { toast } = useToast();
+          toast({
+            title: "Error",
+            description: "Error while logging out",
+            variant: "destructive",
+          });
+          console.log(err);
+        }
       },
     }),
     {

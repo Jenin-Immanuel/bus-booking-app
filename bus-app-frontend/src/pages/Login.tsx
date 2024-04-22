@@ -39,7 +39,9 @@ export default function Login() {
   const isAuth = useAuthStore((state) => state.isAuth);
 
   useEffect(() => {
-    if (isAuth) navigate("/p/dashboard");
+    if (isAuth) {
+      navigate("/p/dashboard");
+    }
   }, []);
   const navigate = useNavigate();
   const { toast } = useToast();

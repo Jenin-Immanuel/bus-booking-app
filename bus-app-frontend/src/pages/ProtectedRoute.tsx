@@ -16,13 +16,18 @@ export default function ProtectedRoute() {
   const { toast } = useToast();
 
   isAuth = useAuthStore((state) => state.isAuth);
+  const login = useAuthStore((state) => state.login);
+  const logout = useAuthStore((state) => state.logout);
   useEffect(() => {
     (async () => {
       try {
-        await axios.get(`${API_URL}/user/me`, {
+        const res = await axios.get(`${API_URL}/user/me`, {
           withCredentials: true,
         });
+        // Update the auth state
+        login(res.data.data.name, res.data.data.email);
       } catch (err) {
+        logout();
         toast({
           title: "Login",
           description: "Please login to access this page",

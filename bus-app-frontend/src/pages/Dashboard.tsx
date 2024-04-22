@@ -64,11 +64,8 @@ export default function Dashboard() {
   }, []);
 
   async function handleLogout() {
-    const res = await axios.get(`${API_URL}/user/logout`, {
-      withCredentials: true,
-    });
     logout();
-    alert(res.data.message);
+    alert("You have been logged out");
     navigate("/");
   }
 

@@ -24,11 +24,14 @@ async function login(req, res, next) {
   const password = req.body.password
   try {
     const { token, name } = await userService.login(email, password)
+    const expirationDate = new Date()
+    expirationDate.setHours(expirationDate.getDate() + 24)
     res.cookie("accessToken", token, {
       httpOnly: true,
       secure: true,
       sameSite: "none",
       path: "/",
+      maxAge: expirationDate,
     })
 
     return res.status(200).json({ token, name, email })
